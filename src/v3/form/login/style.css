@@ -41,6 +41,24 @@ Label {
 }
 
 AnimatedButton {
+	-fx-background-color: rgba(0.0, 0.0, 0.0, 0.1);
+	-fx-text-fill: lightgray;
+	-fx-font-family: "Consolas";
+}
+
+AnimatedButton:hover {
+	-fx-background-color: rgba(0.0, 0.0, 0.0, 0.2);
+}
+
+AnimatedButton:pressed {
+	-fx-background-color: rgba(0.0, 0.0, 0.0, 0.5);
+}
+
+TextField {
+	-fx-font-family: "Consolas";
+}
+
+PasswordField {
 	-fx-font-family: "Consolas";
 }
 

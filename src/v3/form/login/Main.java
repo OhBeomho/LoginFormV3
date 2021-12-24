@@ -127,6 +127,15 @@ public class Main extends Application {
 
 		introPane.getChildren().add(titleLabel);
 
+		AnimatedButton[] buttons = { loginButton, registerButton, okButton, cancelButton, profileButton };
+		for (AnimatedButton button : buttons) button.setShape(new Rectangle(button.getPrefWidth(), button.getPrefHeight()));
+
+		TextField[] fields = { emailField, passwordField, rNameField, rEmailField, rPasswordField, rConfirmPasswordField };
+		for (TextField field : fields) {
+			field.setPrefWidth(200);
+			field.setShape(new Rectangle(field.getPrefWidth(), 30));
+		}
+
 		// Login Pane
 
 		HBox[] lHBoxes = new HBox[3];
@@ -195,6 +204,8 @@ public class Main extends Application {
 
 		loggedInPane.getChildren().addAll(niLabel, profilePane, menuPane, menuButton);
 
+		loggedInPane.setAlignment(Pos.CENTER_LEFT);
+
 		StackPane.setAlignment(menuButton, Pos.TOP_LEFT);
 		StackPane.setAlignment(niLabel, Pos.CENTER);
 
@@ -229,6 +240,14 @@ public class Main extends Application {
 			viewProfile = !viewProfile;
 			viewProfile(viewProfile);
 		});
+		logoutButton.setOnAction(e -> {
+			viewProfile(false);
+			viewMenu(false);
+			viewProfile = false;
+			viewMenu = false;
+
+			fadeTransition(loginPane);
+		});
 
 		// Profile Pane
 
@@ -242,17 +261,18 @@ public class Main extends Application {
 
 		scene.getStylesheets().add(Main.class.getResource("style.css").toString());
 
-		profilePane.translateYProperty().bind(stageHeight.subtract(stageHeight.multiply(2)));
-		menuPane.translateXProperty().bind(stageWidth.subtract(stageWidth.add(menuPane.getMaxWidth())));
-
-		loggedInPane.setAlignment(Pos.CENTER_LEFT);
+		stageHeight.bind(stage.heightProperty());
+		stageWidth.bind(stage.widthProperty());
 
 		stage.setScene(scene);
 		stage.setTitle("JavaFX Login Form V3");
+		stage.heightProperty().addListener(e -> {
+			if (!viewProfile) profilePane.setTranslateY(-stageHeight.get());
+		});
 		stage.show();
 
-		stageHeight.bind(stage.heightProperty());
-		stageWidth.bind(stage.widthProperty());
+		profilePane.setTranslateY(-stageHeight.get());
+		menuPane.setTranslateX(stageWidth.subtract(stageWidth.add(menuPane.getMaxWidth())).get());
 
 		intro();
 	}
@@ -312,15 +332,12 @@ public class Main extends Application {
 		KeyFrame frame = null;
 		KeyValue value = null;
 
-		profilePane.translateYProperty().unbind();
-
 		if (view) value = new KeyValue(profilePane.translateYProperty(), 0, Interpolator.SPLINE(0, 0, 0, 1));
 		else value = new KeyValue(profilePane.translateYProperty(), -stageHeight.get(), Interpolator.SPLINE(0, 0, 0, 1));
 
 		frame = new KeyFrame(Duration.seconds(1), value);
 
 		timeline.getKeyFrames().add(frame);
-		if (!view) timeline.setOnFinished(e -> profilePane.translateYProperty().bind(stageHeight.subtract(stageHeight.multiply(2))));
 		timeline.play();
 	}
 
@@ -329,8 +346,6 @@ public class Main extends Application {
 		KeyFrame frame = null;
 		KeyValue value = null;
 
-		menuPane.translateXProperty().unbind();
-
 		if (view) value = new KeyValue(menuPane.translateXProperty(), 0, Interpolator.SPLINE(0, 0, 0, 1));
 		else value = new KeyValue(menuPane.translateXProperty(), stageWidth.subtract(stageWidth.add(menuPane.getMaxWidth())).get(),
 			Interpolator.SPLINE(0, 0, 0, 1));
@@ -338,7 +353,6 @@ public class Main extends Application {
 		frame = new KeyFrame(Duration.seconds(1), value);
 
 		timeline.getKeyFrames().add(frame);
-		if (!view) timeline.setOnFinished(e -> menuPane.translateXProperty().bind(stageWidth.subtract(stageWidth.add(menuPane.getMaxWidth()))));
 		timeline.play();
 	}
 
