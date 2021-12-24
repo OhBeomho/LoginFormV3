@@ -15,7 +15,7 @@
 }
 
 #MENU {
-	-fx-background-color: rgba(255.0, 255.0, 255.0, 0.5);
+	-fx-background-color: rgba(255.0, 255.0, 255.0, 0.3);
 }
 
 #MENUB {
@@ -42,11 +42,12 @@ Label {
 
 AnimatedButton {
 	-fx-background-color: rgba(0.0, 0.0, 0.0, 0.1);
-	-fx-text-fill: lightgray;
+	-fx-text-fill: darkgray;
 	-fx-font-family: "Consolas";
 }
 
 AnimatedButton:hover {
+	-fx-text-fill: lightgray;
 	-fx-background-color: rgba(0.0, 0.0, 0.0, 0.2);
 }
 
